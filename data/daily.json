@@ -1,1 +1,90 @@
-[]
+[
+ {
+  "dia": "2026-10-04",
+  "id": "santpau",
+  "nom": "Sant Pau d'Ordal",
+  "tmin": 23.0,
+  "tmax": 23.6,
+  "pluja": 4.2
+ },
+ {
+  "dia": "2026-10-04",
+  "id": "mc-739b",
+  "nom": "Sant Pau d'Ordal",
+  "tmin": 23.6,
+  "tmax": 23.6,
+  "pluja": 4.2
+ },
+ {
+  "dia": "2026-10-04",
+  "id": "santpau-wl",
+  "nom": "Sant Pau d'Ordal",
+  "tmin": 23.0,
+  "tmax": 23.0,
+  "pluja": 4.2
+ },
+ {
+  "dia": "2026-10-04",
+  "id": "n340",
+  "nom": "N-340 PK 1224",
+  "tmin": 20.7,
+  "tmax": 20.9,
+  "pluja": null
+ },
+ {
+  "dia": "2026-10-04",
+  "id": "ordal-mc",
+  "nom": "Meteoclimatic - RSS",
+  "tmin": null,
+  "tmax": null,
+  "pluja": null
+ },
+ {
+  "dia": "2026-10-04",
+  "id": "lavern-mc",
+  "nom": "Meteoclimatic - RSS",
+  "tmin": null,
+  "tmax": null,
+  "pluja": null
+ },
+ {
+  "dia": "2026-10-04",
+  "id": "cantallops-mc",
+  "nom": "Meteoclimatic - RSS",
+  "tmin": null,
+  "tmax": null,
+  "pluja": null
+ },
+ {
+  "dia": "2026-10-04",
+  "id": "mc-739c",
+  "nom": "Lavern",
+  "tmin": 25.3,
+  "tmax": 25.3,
+  "pluja": 0.0
+ },
+ {
+  "dia": "2026-10-04",
+  "id": "lavern",
+  "nom": "Lavern",
+  "tmin": 25.1,
+  "tmax": 25.3,
+  "pluja": 0.0
+ },
+ {
+  "dia": "2026-10-04",
+  "id": "mc-739a",
+  "nom": "Cantallops",
+  "tmin": 23.7,
+  "tmax": 23.7,
+  "pluja": 1.4
+ },
+ {
+  "dia": "2026-10-04",
+  "id": "cantallops",
+  "nom": "Cantallops",
+  "tmin": 23.3,
+  "tmax": 23.7,
+  "pluja": 1.4
+ }
+]

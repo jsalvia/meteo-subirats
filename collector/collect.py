@@ -170,8 +170,9 @@ def resum_diari(fitxer):
                     continue
                 dia = datetime.fromtimestamp(r["epoch"], TZ).strftime("%Y-%m-%d")
                 for e in r.get("estacions", []):
-                    d = dies.setdefault((dia, e["id"]), {"dia": dia, "id": e["id"], "nom": e["nom"],
-                                                        "tmin": None, "tmax": None, "pluja": None})
+                    eid = e.get("id") or e.get("clau") or e.get("nom") or "?"
+                    d = dies.setdefault((dia, eid), {"dia": dia, "id": eid, "nom": e.get("nom", eid),
+                                                     "tmin": None, "tmax": None, "pluja": None})
                     if e.get("temp") is not None:
                         d["tmin"] = e["temp"] if d["tmin"] is None else min(d["tmin"], e["temp"])
                         d["tmax"] = e["temp"] if d["tmax"] is None else max(d["tmax"], e["temp"])
