@@ -1,0 +1,49 @@
+{
+ "actualitzat": "2026-10-04T17:29:55+02:00",
+ "epoch": 1791127795,
+ "estacions": [
+  {
+   "clau": "santpau",
+   "nom": "Sant Pau d'Ordal",
+   "xarxa": "WeatherLink",
+   "temp": 23.0,
+   "hum": 78.0,
+   "vent": 11.0,
+   "ratxa": 31.0,
+   "pluja_avui": 4.2,
+   "pluja_temporada": 559.6,
+   "pressio": 1019.1,
+   "font": "https://meteosantpau.eu/"
+  },
+  {
+   "clau": "ordal-mc",
+   "nom": "Meteoclimatic - RSS",
+   "xarxa": "Meteoclimatic",
+   "temp": null,
+   "hum": null,
+   "pluja": null,
+   "pluja_avui": null,
+   "font": "https://www.meteoclimatic.net/perfil/ESCAT0800000008739B"
+  },
+  {
+   "clau": "lavern-mc",
+   "nom": "Meteoclimatic - RSS",
+   "xarxa": "Meteoclimatic",
+   "temp": null,
+   "hum": null,
+   "pluja": null,
+   "pluja_avui": null,
+   "font": "https://www.meteoclimatic.net/perfil/ESCAT0800000008739C"
+  },
+  {
+   "clau": "cantallops-mc",
+   "nom": "Meteoclimatic - RSS",
+   "xarxa": "Meteoclimatic",
+   "temp": null,
+   "hum": null,
+   "pluja": null,
+   "pluja_avui": null,
+   "font": "https://www.meteoclimatic.net/perfil/ESCAT0800000008739A"
+  }
+ ]
+}

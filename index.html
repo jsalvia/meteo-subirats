@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El temps a Subirats</title>
+<meta name="description" content="Dades en directe de les estacions meteorològiques de Subirats (Alt Penedès).">
+<meta property="og:title" content="El temps a Subirats">
+<meta property="og:description" content="Totes les estacions meteorològiques del municipi, en directe.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#0b1220; --card:#151f33; --card2:#1b2740; --ink:#eef3fb; --mut:#93a3bd;
+    --accent:#4cc9f0; --accent2:#7bd389; --warn:#ffb703; --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:radial-gradient(1200px 600px at 20% -10%,#16294a 0%,var(--bg) 60%);
+    color:var(--ink); min-height:100vh; padding:20px;
+  }
+  .wrap{max-width:1180px;margin:0 auto}
+  header{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 18px;margin-bottom:22px}
+  h1{font-size:clamp(22px,4vw,34px);letter-spacing:-.5px}
+  h1 span{color:var(--accent)}
+  .stamp{color:var(--mut);font-size:14px}
+  .grid{display:grid;gap:16px}
+  .hero{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+  .card{
+    background:linear-gradient(160deg,var(--card),var(--card2));
+    border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);
+    padding:18px 20px;box-shadow:0 10px 30px rgba(0,0,0,.25);
+  }
+  .k{color:var(--mut);font-size:13px;text-transform:uppercase;letter-spacing:.6px}
+  .v{font-size:clamp(30px,6vw,46px);font-weight:700;line-height:1.05;margin-top:6px}
+  .u{font-size:.5em;color:var(--mut);font-weight:600;margin-left:4px}
+  .sub{color:var(--mut);font-size:13px;margin-top:6px}
+  h2{font-size:16px;margin:26px 0 12px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.8px}
+  .stations{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+  .st{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:4px}
+  .st .name{font-size:15px;font-weight:600}
+  .tag{font-size:11px;color:var(--mut);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:2px 8px}
+  .t{font-size:26px;font-weight:700}
+  .bars{display:flex;align-items:flex-end;gap:6px;height:110px;margin-top:14px}
+  .bars i{flex:1;background:linear-gradient(180deg,var(--accent),rgba(76,201,240,.25));border-radius:6px 6px 3px 3px;display:block;min-height:4px}
+  .note{margin-top:26px;color:var(--mut);font-size:13px;line-height:1.6}
+  .pill{display:inline-block;background:rgba(76,201,240,.12);color:var(--accent);
+        border:1px solid rgba(76,201,240,.3);border-radius:999px;padding:3px 10px;font-size:12px;margin-right:6px}
+  .off{opacity:.5}
+  footer{margin:34px 0 10px;color:var(--mut);font-size:12px;border-top:1px solid rgba(255,255,255,.08);padding-top:14px}
+  a{color:var(--accent)}
+  @media (prefers-color-scheme: light){
+    :root{--bg:#f4f7fb;--card:#fff;--card2:#f7f9fd;--ink:#0d1b2a;--mut:#5b6b85}
+    body{background:radial-gradient(1000px 500px at 15% -10%,#dbe9ff 0%,var(--bg) 60%)}
+    .card{box-shadow:0 6px 20px rgba(20,50,90,.08)}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>El temps a <span>Subirats</span></h1>
+    <div class="stamp" id="stamp">carregant…</div>
+  </header>
+
+  <section class="grid hero" id="hero"></section>
+
+  <h2>Les estacions del municipi</h2>
+  <section class="grid stations" id="stations"></section>
+
+  <h2>Pluja dels darrers dies</h2>
+  <div class="card">
+    <div class="k">Acumulat per dia, Sant Pau d'Ordal (mm)</div>
+    <div class="bars" id="bars"></div>
+    <div class="sub" id="barssub"></div>
+  </div>
+
+  <p class="note">
+    <span class="pill">Fonts</span> Estacions particulars de Subirats i dades obertes.
+    Les xifres de les estacions particulars <b>no estan certificades</b> pel Servei Meteorològic de Catalunya.
+  </p>
+
+  <footer>
+    <span id="year"></span> · Dades cada 15 minuts ·
+    <a href="./data/current.json">dades en cru</a>
+  </footer>
+</div>
+
+<script>
+const fmt = (n, dec = 1) => (n === null || n === undefined) ? "—" : Number(n).toFixed(dec);
+const val = (n, dec = 0) => (n === null || n === undefined) ? "—" : Number(n).toFixed(dec);
+
+async function carga() {
+  let cur = null, dia = [];
+  try { cur = await (await fetch("./data/current.json", {cache:"no-store"})).json(); } catch(e) {}
+  try { dia = await (await fetch("./data/daily.json", {cache:"no-store"})).json(); } catch(e) {}
+
+  if (!cur) {
+    document.getElementById("stamp").textContent = "Encara no hi ha dades. El recol·lector les hi posarà de seguida.";
+    return;
+  }
+
+  const sp = (cur.estacions || []).find(e => e.clau === "santpau") || {};
+  const hero = [
+    { k:"Temperatura", v: val(sp.temp), u:"°C",  sub:"Sant Pau d'Ordal" },
+    { k:"Pluja avui",  v: fmt(sp.pluja_avui), u:"mm", sub: fmt(sp.pluja_temporada) + " mm de temporada" },
+    { k:"Vent",        v: val(sp.vent), u:"km/h", sub: "Ratxa de " + val(sp.ratxa) + " km/h" },
+    { k:"Humitat",     v: val(sp.hum), u:"%", sub: "Pressió " + fmt(sp.pressio) + " hPa" },
+  ];
+  document.getElementById("hero").innerHTML = hero.map(h => `
+    <div class="card">
+      <div class="k">${h.k}</div>
+      <div class="v">${h.v}<span class="u">${h.u}</span></div>
+      <div class="sub">${h.sub}</div>
+    </div>`).join("");
+
+  document.getElementById("stations").innerHTML = (cur.estacions || []).map(s => {
+    const te = s.temp !== null || s.hum !== null;
+    return `<div class="card${te ? "" : " off"}">
+      <div class="k">${s.xarxa || ""}</div>
+      <div class="st"><div class="name">${s.nom}</div><div class="tag">${te ? "en línia" : "sense lectura"}</div></div>
+      <div class="t">${te ? val(s.temp) + "°" : "—"}
+        <span class="sub">${s.pluja_avui != null ? "· " + fmt(s.pluja_avui) + " mm" : (s.pluja != null ? "· " + fmt(s.pluja) + " mm" : "")}
+        ${s.hum != null ? "· " + val(s.hum) + "%" : ""}</span></div>
+      <div class="sub">${s.vent != null ? "Vent " + val(s.vent) + " km/h" : ""}</div>
+    </div>`;
+  }).join("");
+
+  // gràfic: pluja diària de Sant Pau
+  const perDia = {};
+  dia.filter(d => d.clau === "santpau" && d.pluja_max != null).forEach(d => { perDia[d.dia] = d.pluja_max; });
+  const dies = Object.keys(perDia).sort().slice(-14);
+  const serie = dies.map(d => perDia[d]);
+  const max = Math.max(...serie, 1);
+  document.getElementById("bars").innerHTML = serie.length
+    ? serie.map(v => `<i style="height:${Math.max(4,(v/max)*100)}%" title="${v} mm"></i>`).join("")
+    : `<i style="height:4%"></i>`;
+  document.getElementById("barssub").textContent = dies.length
+    ? "Del " + dies[0] + " al " + dies[dies.length-1]
+    : "La sèrie s'anirà omplint amb les dades que recollim.";
+
+  const t = new Date(cur.actualitzat);
+  document.getElementById("stamp").textContent = "Actualitzat " +
+    t.toLocaleTimeString("ca-ES", {hour:"2-digit", minute:"2-digit"}) + " · " +
+    t.toLocaleDateString("ca-ES", {day:"numeric", month:"long", year:"numeric"});
+  document.getElementById("year").textContent = new Date().getFullYear();
+}
+carga();
+setTimeout(carga, 20000);
+</script>
+</body>
+</html>
