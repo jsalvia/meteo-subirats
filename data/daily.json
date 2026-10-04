@@ -1,9 +1,66 @@
 [
  {
   "dia": "2026-10-04",
-  "clau": "santpau",
+  "clau": "santpau-wl",
+  "nom": "Sant Pau d'Ordal",
   "tmin": 23.0,
   "tmax": 23.0,
-  "pluja_max": 4.2
+  "pluja": 4.2
+ },
+ {
+  "dia": "2026-10-04",
+  "clau": "santpau",
+  "nom": "Sant Pau d'Ordal",
+  "tmin": 23.0,
+  "tmax": 23.0,
+  "pluja": 4.2
+ },
+ {
+  "dia": "2026-10-04",
+  "clau": "ordal-mc",
+  "nom": "Meteoclimatic - RSS",
+  "tmin": null,
+  "tmax": null,
+  "pluja": null
+ },
+ {
+  "dia": "2026-10-04",
+  "clau": "mc-739c",
+  "nom": "Lavern",
+  "tmin": 25.3,
+  "tmax": 25.3,
+  "pluja": 0.0
+ },
+ {
+  "dia": "2026-10-04",
+  "clau": "mc-739b",
+  "nom": "Sant Pau d'Ordal",
+  "tmin": 23.6,
+  "tmax": 23.6,
+  "pluja": 4.2
+ },
+ {
+  "dia": "2026-10-04",
+  "clau": "mc-739a",
+  "nom": "Cantallops",
+  "tmin": 23.7,
+  "tmax": 23.7,
+  "pluja": 1.4
+ },
+ {
+  "dia": "2026-10-04",
+  "clau": "lavern-mc",
+  "nom": "Meteoclimatic - RSS",
+  "tmin": null,
+  "tmax": null,
+  "pluja": null
+ },
+ {
+  "dia": "2026-10-04",
+  "clau": "cantallops-mc",
+  "nom": "Meteoclimatic - RSS",
+  "tmin": null,
+  "tmax": null,
+  "pluja": null
  }
 ]
