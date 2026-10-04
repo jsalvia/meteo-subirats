@@ -5,7 +5,7 @@
   "nom": "Sant Pau d'Ordal",
   "pluja": 4.2,
   "tmax": 23.6,
-  "tmin": 23.3,
+  "tmin": 20.3,
   "dies": 1
  },
  {
@@ -14,7 +14,7 @@
   "nom": "N-340 PK 1224",
   "pluja": null,
   "tmax": 20.9,
-  "tmin": 20.4,
+  "tmin": 18.8,
   "dies": 1
  },
  {
@@ -23,7 +23,7 @@
   "nom": "Lavern",
   "pluja": 0.0,
   "tmax": 25.3,
-  "tmin": 25.1,
+  "tmin": 20.4,
   "dies": 1
  },
  {
@@ -32,7 +32,7 @@
   "nom": "Cantallops",
   "pluja": 1.4,
   "tmax": 23.7,
-  "tmin": 23.3,
+  "tmin": 20.1,
   "dies": 1
  }
 ]
