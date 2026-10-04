@@ -82,6 +82,7 @@
 
   <footer>
     <span id="year"></span> · Dades cada 15 minuts ·
+    <a href="./mensual.html">dades mensuals</a> ·
     <a href="./data/current.json">dades en cru</a>
   </footer>
 </div>
@@ -119,7 +120,7 @@ async function carga() {
   document.getElementById("stations").innerHTML = (cur.estacions || []).map(s => {
     const te = s.temp !== null || s.hum !== null;
     return `<div class="card${te ? "" : " off"}">
-      <div class="k">${s.xarxa || ""}</div>
+      <div class="k">${(s.xarxes || []).join(" · ") || ""}</div>
       <div class="st"><div class="name">${s.nom}</div><div class="tag">${te ? "en línia" : "sense lectura"}</div></div>
       <div class="t">${s.temp !== null && s.temp !== undefined ? val(s.temp) + "°" : "—"}
         <span class="sub">${s.pluja_avui != null ? "· " + fmt(s.pluja_avui) + " mm" : (s.pluja != null ? "· " + fmt(s.pluja) + " mm" : "")}

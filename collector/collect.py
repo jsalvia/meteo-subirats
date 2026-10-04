@@ -2,16 +2,19 @@
 """
 Recol·lector de les estacions meteorològiques de Subirats.
 
-Fonts, per ordre de fiabilitat:
-  1. Meteoclimatic (RSS)  - dona temperatura amb max/min, humitat, pressio, vent i precipitacio
-  2. WeatherLink (JSON)   - Sant Pau d'Ordal
-  3. Weathercloud (JSON)  - la resta; va a batzegades, s'hi reintenta
+Una entrada per estació, amb totes les fonts fusionades.
+
+Fonts:
+  - Meteoclimatic (RSS): temperatura (amb max/min), humitat, pressio, vent, precipitacio
+  - WeatherLink (JSON): Sant Pau d'Ordal, amb "pluja avui" i "pluja de temporada"
+  - Weathercloud (JSON): cal obtenir el token CSRF de la galeta abans de demanar valors
 
 Desa:
-  data/current.json   - última lectura
+  data/current.json   - última lectura, una entrada per estació
   data/history.jsonl  - una línia per passada
   data/daily.json     - resum diari
 """
+import http.cookiejar
 import json
 import os
 import re
@@ -26,33 +29,40 @@ TZ = timezone(timedelta(hours=2))
 
 SANT_PAU_URL = "https://www.weatherlink.com/embeddablePage/getData/bf48e8ffb92245b495f64248001dff73"
 
-# Meteoclimatic: (codi, nom)
-METEOCLIMATIC = [
-    ("ESCAT0800000008739A", "Cantallops"),
-    ("ESCAT0800000008739B", "Sant Pau d'Ordal"),
-    ("ESCAT0800000008739C", "Lavern"),
+# Registre canònic: una estació, totes les seves fonts
+ESTACIONS = [
+    {"id": "santpau", "nom": "Sant Pau d'Ordal", "mc": "ESCAT0800000008739B", "wl": True},
+    {"id": "lavern", "nom": "Lavern", "mc": "ESCAT0800000008739C", "wc": "2131348548"},
+    {"id": "cantallops", "nom": "Cantallops", "mc": "ESCAT0800000008739A", "wc": "0379499406"},
+    {"id": "ordal", "nom": "Ordal", "wc": "0154096948"},
+    {"id": "canmila", "nom": "Can Milà de la Roca", "wc": "1608794808"},
+    {"id": "n340", "nom": "N-340 PK 1224", "wc": "6275944158"},
 ]
 
-# Weathercloud: (clau, nom, id amb zeros)
-WEATHERCLOUD = [
-    ("lavern-wc", "Lavern · El Llebeig", "2131348548"),
-    ("ordal-wc", "Ordal · Meteo Ordal", "0154096948"),
-    ("canmila", "Can Milà de la Roca", "1608794808"),
-    ("cantallops-wc", "Cantallops (Weathercloud)", "0379499406"),
-    ("n340", "N-340 PK 1224", "6275944158"),
-]
-
-
-def get(url, headers=None, tries=3, timeout=12):
-    req = urllib.request.Request(url, headers={"User-Agent": UA, **(headers or {})})
-    for i in range(tries):
-        try:
-            with urllib.request.urlopen(req, timeout=timeout) as r:
-                return r.read().decode("utf-8", "replace")
-        except Exception:
-            if i < tries - 1:
-                time.sleep(1.5 * (i + 1))
-    return None
+CAMP_MC = {
+    "temp": r"Temperatura:\s*(-?[\d.,]+)",
+    "hum": r"Humedad:\s*([\d.,]+)",
+    "pressio": r"Barómetro:\s*([\d.,]+)",
+    "vent": r"Viento:\s*([\d.,]+)",
+    "pluja_avui": r"Precip\.?:\s*([\d.,]+)",
+}
+CAMP_WC = {
+    "temp": "temp",
+    "hum": "hum",
+    "vent": "wspd",
+    "ratxa": "wspdhi",
+    "pressio": "bar",
+    "pluja": "rain",
+}
+CAMP_WL = {
+    "temp": "temperature",
+    "hum": "humidity",
+    "vent": "wind",
+    "ratxa": "gust",
+    "pressio": "barometer",
+    "pluja_avui": "rain",
+    "pluja_temporada": "seasonalRain",
+}
 
 
 def num(x):
@@ -64,37 +74,41 @@ def num(x):
         return None
 
 
-def meteoclimatic(codi, nom):
+def get(url, headers=None, tries=3, timeout=15, opener=None):
+    for i in range(tries):
+        try:
+            if opener:
+                req = urllib.request.Request(url, headers={"User-Agent": UA, **(headers or {})})
+                with opener.open(req, timeout=timeout) as r:
+                    return r.read().decode("utf-8", "replace")
+            req = urllib.request.Request(url, headers={"User-Agent": UA, **(headers or {})})
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return r.read().decode("utf-8", "replace")
+        except Exception:
+            if i < tries - 1:
+                time.sleep(1.5 * (i + 1))
+    return None
+
+
+# ---------- fonts ----------
+
+def font_meteoclimatic(codi):
     xml = get("https://www.meteoclimatic.net/feed/rss/" + codi, tries=2)
     if not xml:
         return None
     m = re.search(r"<item>(.*?)</item>", xml, re.S)
-    item = m.group(1) if m else ""
-    d = re.search(r"<description>\s*<!\[CDATA\[(.*?)\]\]>", item, re.S)
+    d = re.search(r"<description>\s*<!\[CDATA\[(.*?)\]\]>", m.group(1) if m else "", re.S)
     if not d:
         return None
     txt = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", d.group(1)))
-
-    def v(pat):
+    out = {}
+    for k, pat in CAMP_MC.items():
         mm = re.search(pat, txt, re.I)
-        return num(mm.group(1)) if mm else None
-
-    return {
-        "clau": "mc-" + codi[-4:].lower(),
-        "nom": nom,
-        "xarxa": "Meteoclimatic",
-        "temp": v(r"Temperatura:\s*(-?[\d.,]+)"),
-        "tmin": v(r"Mín\.?:\s*(-?[\d.,]+)\s*º?\s*C(?!\w)"),
-        "hum": v(r"Humedad:\s*([\d.,]+)"),
-        "vent": v(r"Viento:\s*([\d.,]+)"),
-        "ratxa": v(r"Máx\.?:\s*([\d.,]+)\s*\)"),
-        "pressio": v(r"Barómetro:\s*([\d.,]+)"),
-        "pluja_avui": v(r"Precip\.?:\s*([\d.,]+)"),
-        "font": "https://www.meteoclimatic.net/perfil/" + codi,
-    }
+        out[k] = num(mm.group(1)) if mm else None
+    return out
 
 
-def sant_pau():
+def font_weatherlink():
     raw = get(SANT_PAU_URL)
     if not raw:
         return None
@@ -102,49 +116,44 @@ def sant_pau():
         d = json.loads(raw)
     except Exception:
         return None
-    return {
-        "clau": "santpau-wl",
-        "nom": "Sant Pau d'Ordal",
-        "xarxa": "WeatherLink",
-        "temp": num(d.get("temperature")),
-        "hum": num(d.get("humidity")),
-        "vent": num(d.get("wind")),
-        "ratxa": num(d.get("gust")),
-        "pressio": num(d.get("barometer")),
-        "pluja_avui": num(d.get("rain")),
-        "pluja_temporada": num(d.get("seasonalRain")),
-        "font": "https://meteosantpau.eu/",
-    }
+    return {k: num(d.get(v)) for k, v in CAMP_WL.items()}
 
 
-def weathercloud(clau, nom, did):
-    raw = get(
-        "https://app.weathercloud.net/device/values/%d" % int(did),
-        {"Referer": "https://app.weathercloud.net/d" + did},
-        tries=2,
-    )
+def font_weathercloud(did):
+    cj = http.cookiejar.CookieJar()
+    opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
+    pagina = "https://app.weathercloud.net/d" + did
+    if not get(pagina, tries=2, opener=opener):
+        return None
+    token = None
+    for c in cj:
+        if c.name == "WEATHERCLOUD_CSRF_TOKEN":
+            token = c.value
+    h = {"Referer": pagina, "X-Requested-With": "XMLHttpRequest"}
+    if token:
+        h["X-CSRF-TOKEN"] = token
+    raw = get("https://app.weathercloud.net/device/values/%d" % int(did), h, tries=2, opener=opener)
     try:
         d = json.loads(raw) if raw else None
     except Exception:
         d = None
     if not d:
         return None
-    return {
-        "clau": clau,
-        "nom": nom,
-        "xarxa": "Weathercloud",
-        "temp": num(d.get("temp")),
-        "hum": num(d.get("hum")),
-        "vent": num(d.get("wspd")),
-        "ratxa": num(d.get("wspdhi")),
-        "pressio": num(d.get("bar")),
-        "pluja": num(d.get("rain")),
-        "font": "https://app.weathercloud.net/d" + did,
-    }
+    return {k: num(d.get(v)) for k, v in CAMP_WC.items()}
 
 
-def te_dades(e):
-    return any(e.get(k) is not None for k in ("temp", "hum", "vent", "pluja", "pluja_avui"))
+# ---------- fusió ----------
+
+def fusiona(entrades):
+    """Primera font amb valor no nul per a cada camp. Les fonts anteriors tenen prioritat."""
+    out = {}
+    for e in entrades:
+        if not e:
+            continue
+        for k, v in e.items():
+            if v is not None and out.get(k) is None:
+                out[k] = v
+    return out
 
 
 def resum_diari(fitxer):
@@ -159,11 +168,10 @@ def resum_diari(fitxer):
                     r = json.loads(linia)
                 except Exception:
                     continue
+                dia = datetime.fromtimestamp(r["epoch"], TZ).strftime("%Y-%m-%d")
                 for e in r.get("estacions", []):
-                    dia = datetime.fromtimestamp(r["epoch"], TZ).strftime("%Y-%m-%d")
-                    k = (dia, e["clau"])
-                    d = dies.setdefault(k, {"dia": dia, "clau": e["clau"], "nom": e.get("nom"),
-                                            "tmin": None, "tmax": None, "pluja": None})
+                    d = dies.setdefault((dia, e["id"]), {"dia": dia, "id": e["id"], "nom": e["nom"],
+                                                        "tmin": None, "tmax": None, "pluja": None})
                     if e.get("temp") is not None:
                         d["tmin"] = e["temp"] if d["tmin"] is None else min(d["tmin"], e["temp"])
                         d["tmax"] = e["temp"] if d["tmax"] is None else max(d["tmax"], e["temp"])
@@ -171,54 +179,84 @@ def resum_diari(fitxer):
                         d["pluja"] = e["pluja_avui"]
     except Exception:
         return []
-    return sorted(dies.values(), key=lambda d: (d["dia"], d["clau"]), reverse=True)[:600]
+    return sorted(dies.values(), key=lambda d: (d["dia"], d["nom"]), reverse=True)[:900]
+
+
+def resum_mensual(diaris):
+    """Agrega el resum diari en mesos, per estacio."""
+    mesos = {}
+    for d in diaris:
+        mes = d["dia"][:7]
+        k = (mes, d["id"])
+        m = mesos.setdefault(k, {"mes": mes, "id": d["id"], "nom": d["nom"],
+                                "pluja": 0.0, "te_pluja": False,
+                                "tmax": None, "tmin": None, "dies": 0})
+        m["dies"] += 1
+        if d.get("pluja") is not None:
+            m["pluja"] += d["pluja"]
+            m["te_pluja"] = True
+        if d.get("tmax") is not None:
+            m["tmax"] = d["tmax"] if m["tmax"] is None else max(m["tmax"], d["tmax"])
+        if d.get("tmin") is not None:
+            m["tmin"] = d["tmin"] if m["tmin"] is None else min(m["tmin"], d["tmin"])
+    for m in mesos.values():
+        if not m["te_pluja"]:
+            m["pluja"] = None
+        m.pop("te_pluja", None)
+        if m["pluja"] is not None:
+            m["pluja"] = round(m["pluja"], 1)
+    return sorted(mesos.values(), key=lambda x: (x["mes"], x["nom"]), reverse=True)
 
 
 def main():
     os.makedirs(DATA, exist_ok=True)
     ara = int(time.time())
     estacions = []
-    fallades = []
 
-    for codi, nom in METEOCLIMATIC:
-        r = meteoclimatic(codi, nom)
-        if r and te_dades(r):
-            estacions.append(r)
-        else:
-            fallades.append("Meteoclimatic " + nom)
-        time.sleep(0.8)
+    for est in ESTACIONS:
+        entrades = []
+        fonts = []
+        if est.get("mc"):
+            e = font_meteoclimatic(est["mc"])
+            entrades.append(e)
+            if e:
+                fonts.append("Meteoclimatic")
+            time.sleep(0.8)
+        if est.get("wl"):
+            e = font_weatherlink()
+            entrades.append(e)
+            if e:
+                fonts.append("WeatherLink")
+        if est.get("wc"):
+            e = font_weathercloud(est["wc"])
+            entrades.append(e)
+            if e:
+                fonts.append("Weathercloud")
+            time.sleep(1.5)
 
-    r = sant_pau()
-    if r and te_dades(r):
-        estacions.append(r)
-    else:
-        fallades.append("WeatherLink Sant Pau")
-
-    for clau, nom, did in WEATHERCLOUD:
-        r = weathercloud(clau, nom, did)
-        if r and te_dades(r):
-            estacions.append(r)
-        else:
-            fallades.append("Weathercloud " + nom)
-        time.sleep(1.2)
+        dades = fusiona(entrades)
+        dades.update({"id": est["id"], "nom": est["nom"], "xarxes": fonts})
+        if any(dades.get(k) is not None for k in ("temp", "hum", "vent", "pluja", "pluja_avui")):
+            estacions.append(dades)
 
     current = {
         "actualitzat": datetime.fromtimestamp(ara, TZ).isoformat(),
         "epoch": ara,
         "estacions": estacions,
-        "sense_lectura": fallades,
     }
-    for cami, obj in ((os.path.join(DATA, "current.json"), current),):
-        with open(cami, "w", encoding="utf-8") as f:
-            json.dump(obj, f, ensure_ascii=False, indent=1)
-
+    with open(os.path.join(DATA, "current.json"), "w", encoding="utf-8") as f:
+        json.dump(current, f, ensure_ascii=False, indent=1)
     with open(os.path.join(DATA, "history.jsonl"), "a", encoding="utf-8") as f:
         f.write(json.dumps(current, ensure_ascii=False) + "\n")
-
+    diaris = resum_diari(os.path.join(DATA, "history.jsonl"))
     with open(os.path.join(DATA, "daily.json"), "w", encoding="utf-8") as f:
-        json.dump(resum_diari(os.path.join(DATA, "history.jsonl")), f, ensure_ascii=False, indent=1)
+        json.dump(diaris, f, ensure_ascii=False, indent=1)
+    with open(os.path.join(DATA, "monthly.json"), "w", encoding="utf-8") as f:
+        json.dump(resum_mensual(diaris), f, ensure_ascii=False, indent=1)
 
-    print("OK: %d estacions amb dades | %d sense: %s" % (len(estacions), len(fallades), ", ".join(fallades)))
+    print("OK %d/%d estacions amb dades" % (len(estacions), len(ESTACIONS)))
+    for e in estacions:
+        print("   %-22s %6s C  %4s%%  fonts: %s" % (e["nom"], e.get("temp"), e.get("hum"), "/".join(e["xarxes"])))
 
 
 if __name__ == "__main__":
