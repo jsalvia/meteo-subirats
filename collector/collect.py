@@ -15,6 +15,7 @@ Desa:
   data/daily.json     - resum diari
 """
 import http.cookiejar
+import html
 import json
 import os
 import re
@@ -156,6 +157,43 @@ def fusiona(entrades):
     return out
 
 
+def font_pluja_dies():
+    """La pluja de cada dia del mes en curs, de la taula Diari de Sant Pau d'Ordal."""
+    h = get("https://meteosantpau.eu/old/wxraindetail.php?r=wxraindetail.php", tries=2)
+    if not h:
+        return None
+    MESOS = ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dec"]
+    avui = datetime.now(TZ)
+    for t in re.findall(r"<table.*?</table>", h, re.S | re.I):
+        files = []
+        for r in re.findall(r"<tr[^>]*>(.*?)</tr>", t, re.S | re.I):
+            cells = [html.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", c))).strip()
+                     for c in re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", r, re.S | re.I)]
+            if cells:
+                files.append(cells)
+        if not files:
+            continue
+        cap = [c.strip().lower() for c in files[0]]
+        if not cap or cap[0] not in ("day", "dia", "día"):
+            continue
+        try:
+            col = [c.strip() for c in files[0]].index(MESOS[avui.month - 1])
+        except ValueError:
+            continue
+        sortida = []
+        for cells in files[1:]:
+            try:
+                dia = int(cells[0])
+            except Exception:
+                continue
+            if col < len(cells):
+                v = num(cells[col])
+                if v is not None:
+                    sortida.append({"dia": "%04d-%02d-%02d" % (avui.year, avui.month, dia), "mm": v})
+        return sortida or None
+    return None
+
+
 def resum_diari(fitxer):
     dies = {}
     try:
@@ -254,6 +292,12 @@ def main():
         json.dump(diaris, f, ensure_ascii=False, indent=1)
     with open(os.path.join(DATA, "monthly.json"), "w", encoding="utf-8") as f:
         json.dump(resum_mensual(diaris), f, ensure_ascii=False, indent=1)
+
+    pluja_dies = font_pluja_dies()
+    with open(os.path.join(DATA, "rain_days.json"), "w", encoding="utf-8") as f:
+        json.dump(pluja_dies or [], f, ensure_ascii=False, indent=1)
+    if pluja_dies:
+        print("   pluja diària de Sant Pau: %d dies" % len(pluja_dies))
 
     print("OK %d/%d estacions amb dades" % (len(estacions), len(ESTACIONS)))
     for e in estacions:

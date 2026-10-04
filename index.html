@@ -129,17 +129,23 @@ async function carga() {
     </div>`;
   }).join("");
 
-  // gràfic: pluja diària de Sant Pau
-  const perDia = {};
-  dia.filter(d => d.clau === "santpau" && d.pluja_max != null).forEach(d => { perDia[d.dia] = d.pluja_max; });
-  const dies = Object.keys(perDia).sort().slice(-14);
-  const serie = dies.map(d => perDia[d]);
-  const max = Math.max(...serie, 1);
-  document.getElementById("bars").innerHTML = serie.length
-    ? serie.map(v => `<i style="height:${Math.max(4,(v/max)*100)}%" title="${v} mm"></i>`).join("")
+  // gràfic: pluja diària de Sant Pau (font: taula diària de l'estació)
+  let dies = [];
+  try {
+    const rd = await (await fetch("./data/rain_days.json", {cache:"no-store"})).json();
+    dies = (rd || []).filter(x => x.mm !== null).slice(-14);
+  } catch(e) {}
+  if (!dies.length) {
+    const perDia = {};
+    dia.filter(d => d.id === "santpau" && d.pluja != null).forEach(d => { perDia[d.dia] = d.pluja; });
+    dies = Object.keys(perDia).sort().slice(-14).map(k => ({ dia: k, mm: perDia[k] }));
+  }
+  const max = Math.max(...dies.map(d => d.mm), 1);
+  document.getElementById("bars").innerHTML = dies.length
+    ? dies.map(d => `<i style="height:${Math.max(4,(d.mm/max)*100)}%" title="${d.dia}: ${d.mm} mm"></i>`).join("")
     : `<i style="height:4%"></i>`;
   document.getElementById("barssub").textContent = dies.length
-    ? "Del " + dies[0] + " al " + dies[dies.length-1]
+    ? "Del " + dies[0].dia + " al " + dies[dies.length-1].dia + " · font: estació de Sant Pau d'Ordal"
     : "La sèrie s'anirà omplint amb les dades que recollim.";
 
   const t = new Date(cur.actualitzat);
