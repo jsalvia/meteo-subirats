@@ -100,9 +100,11 @@ async function carga() {
     return;
   }
 
-  const sp = (cur.estacions || []).find(e => e.clau === "santpau") || {};
+  const ambDades = (cur.estacions || []).filter(e => e.temp !== null && e.temp !== undefined);
+  const sp = (cur.estacions || []).find(e => /sant pau/i.test(e.nom || "") && e.temp !== null)
+          || ambDades[0] || {};
   const hero = [
-    { k:"Temperatura", v: val(sp.temp), u:"°C",  sub:"Sant Pau d'Ordal" },
+    { k:"Temperatura", v: val(sp.temp), u:"°C",  sub: sp.nom || "—" },
     { k:"Pluja avui",  v: fmt(sp.pluja_avui), u:"mm", sub: fmt(sp.pluja_temporada) + " mm de temporada" },
     { k:"Vent",        v: val(sp.vent), u:"km/h", sub: "Ratxa de " + val(sp.ratxa) + " km/h" },
     { k:"Humitat",     v: val(sp.hum), u:"%", sub: "Pressió " + fmt(sp.pressio) + " hPa" },
@@ -119,7 +121,7 @@ async function carga() {
     return `<div class="card${te ? "" : " off"}">
       <div class="k">${s.xarxa || ""}</div>
       <div class="st"><div class="name">${s.nom}</div><div class="tag">${te ? "en línia" : "sense lectura"}</div></div>
-      <div class="t">${te ? val(s.temp) + "°" : "—"}
+      <div class="t">${s.temp !== null && s.temp !== undefined ? val(s.temp) + "°" : "—"}
         <span class="sub">${s.pluja_avui != null ? "· " + fmt(s.pluja_avui) + " mm" : (s.pluja != null ? "· " + fmt(s.pluja) + " mm" : "")}
         ${s.hum != null ? "· " + val(s.hum) + "%" : ""}</span></div>
       <div class="sub">${s.vent != null ? "Vent " + val(s.vent) + " km/h" : ""}</div>
