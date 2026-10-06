@@ -14,7 +14,7 @@
   "nom": "N-340 PK 1224",
   "pluja": null,
   "tmax": 20.9,
-  "tmin": 17.3,
+  "tmin": 15.9,
   "dies": 3
  },
  {
@@ -30,9 +30,9 @@
   "mes": "2026-10",
   "id": "cantallops",
   "nom": "Cantallops",
-  "pluja": 7.4,
+  "pluja": 4.4,
   "tmax": 23.7,
-  "tmin": 17.4,
+  "tmin": 16.9,
   "dies": 3
  }
 ]
