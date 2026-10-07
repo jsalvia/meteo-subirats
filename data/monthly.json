@@ -3,9 +3,9 @@
   "mes": "2026-10",
   "id": "santpau",
   "nom": "Sant Pau d'Ordal",
-  "pluja": 11.2,
+  "pluja": 11.4,
   "tmax": 23.7,
-  "tmin": 17.4,
+  "tmin": 16.7,
   "dies": 4
  },
  {
@@ -21,9 +21,9 @@
   "mes": "2026-10",
   "id": "lavern",
   "nom": "Lavern",
-  "pluja": 11.8,
+  "pluja": 6.0,
   "tmax": 25.3,
-  "tmin": 16.9,
+  "tmin": 16.8,
   "dies": 4
  },
  {
@@ -32,7 +32,7 @@
   "nom": "Cantallops",
   "pluja": 11.4,
   "tmax": 23.7,
-  "tmin": 16.9,
+  "tmin": 16.2,
   "dies": 4
  }
 ]
