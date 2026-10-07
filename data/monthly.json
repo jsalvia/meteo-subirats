@@ -6,7 +6,7 @@
   "pluja": 11.2,
   "tmax": 23.7,
   "tmin": 17.4,
-  "dies": 3
+  "dies": 4
  },
  {
   "mes": "2026-10",
@@ -15,24 +15,24 @@
   "pluja": null,
   "tmax": 20.9,
   "tmin": 15.9,
-  "dies": 3
+  "dies": 4
  },
  {
   "mes": "2026-10",
   "id": "lavern",
   "nom": "Lavern",
-  "pluja": 6.0,
+  "pluja": 11.8,
   "tmax": 25.3,
   "tmin": 16.9,
-  "dies": 3
+  "dies": 4
  },
  {
   "mes": "2026-10",
   "id": "cantallops",
   "nom": "Cantallops",
-  "pluja": 11.2,
+  "pluja": 11.4,
   "tmax": 23.7,
   "tmin": 16.9,
-  "dies": 3
+  "dies": 4
  }
 ]
