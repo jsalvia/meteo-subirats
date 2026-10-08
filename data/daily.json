@@ -4,7 +4,7 @@
   "id": "santpau",
   "nom": "Sant Pau d'Ordal",
   "tmin": 15.9,
-  "tmax": 15.9,
+  "tmax": 16.4,
   "pluja": 0.0
  },
  {
@@ -19,7 +19,7 @@
   "dia": "2026-10-08",
   "id": "lavern",
   "nom": "Lavern",
-  "tmin": 17.9,
+  "tmin": 16.3,
   "tmax": 17.9,
   "pluja": 0.0
  },
@@ -27,7 +27,7 @@
   "dia": "2026-10-08",
   "id": "cantallops",
   "nom": "Cantallops",
-  "tmin": 16.5,
+  "tmin": 16.0,
   "tmax": 16.5,
   "pluja": 0.0
  },
