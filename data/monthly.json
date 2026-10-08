@@ -5,8 +5,8 @@
   "nom": "Sant Pau d'Ordal",
   "pluja": 11.4,
   "tmax": 25.6,
-  "tmin": 16.7,
-  "dies": 4
+  "tmin": 15.9,
+  "dies": 5
  },
  {
   "mes": "2026-10",
@@ -14,8 +14,8 @@
   "nom": "N-340 PK 1224",
   "pluja": null,
   "tmax": 22.6,
-  "tmin": 15.9,
-  "dies": 4
+  "tmin": 15.2,
+  "dies": 5
  },
  {
   "mes": "2026-10",
@@ -24,7 +24,7 @@
   "pluja": 6.0,
   "tmax": 25.8,
   "tmin": 16.8,
-  "dies": 4
+  "dies": 5
  },
  {
   "mes": "2026-10",
@@ -33,6 +33,6 @@
   "pluja": 11.6,
   "tmax": 24.4,
   "tmin": 16.2,
-  "dies": 4
+  "dies": 5
  }
 ]
