@@ -1,14 +1,14 @@
 {
- "actualitzat": "2026-10-13T23:30:06+02:00",
- "epoch": 1791927006,
+ "actualitzat": "2026-10-14T02:34:55+02:00",
+ "epoch": 1791938095,
  "estacions": [
   {
-   "temp": 19.8,
-   "hum": 84.0,
+   "temp": 17.4,
+   "hum": 91.0,
    "vent": 0.0,
    "pluja_avui": 0.0,
-   "ratxa": 23.0,
-   "pressio": 1026.2,
+   "ratxa": 0.0,
+   "pressio": 1026.5,
    "pluja_temporada": 570.0,
    "id": "santpau",
    "nom": "Sant Pau d'Ordal",
@@ -18,12 +18,12 @@
    ]
   },
   {
-   "temp": 19.2,
-   "hum": 84.0,
+   "temp": 17.1,
+   "hum": 89.0,
    "vent": 0.0,
    "pluja_avui": 0.0,
-   "ratxa": 0.0,
-   "pressio": 1024.3,
+   "ratxa": 0.4,
+   "pressio": 1024.8,
    "pluja": 0.0,
    "id": "lavern",
    "nom": "Lavern",
@@ -33,8 +33,8 @@
    ]
   },
   {
-   "temp": 18.4,
-   "hum": 91.0,
+   "temp": 16.6,
+   "hum": 95.0,
    "vent": 360.0,
    "pluja_avui": 0.0,
    "id": "cantallops",
@@ -44,8 +44,8 @@
    ]
   },
   {
-   "temp": 16.6,
-   "hum": 93.0,
+   "temp": 15.8,
+   "hum": 96.0,
    "vent": 0.0,
    "ratxa": 0.0,
    "pressio": 1028.8,
