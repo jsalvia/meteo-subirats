@@ -13,7 +13,7 @@
   "id": "n340",
   "nom": "N-340 PK 1224",
   "pluja": null,
-  "tmax": 22.6,
+  "tmax": 23.8,
   "tmin": 7.9,
   "dies": 11
  },
@@ -22,7 +22,7 @@
   "id": "lavern",
   "nom": "Lavern",
   "pluja": 6.0,
-  "tmax": 25.8,
+  "tmax": 26.6,
   "tmin": 9.2,
   "dies": 11
  },
@@ -31,7 +31,7 @@
   "id": "cantallops",
   "nom": "Cantallops",
   "pluja": 11.6,
-  "tmax": 24.4,
+  "tmax": 25.4,
   "tmin": 9.0,
   "dies": 11
  }
