@@ -4,15 +4,15 @@
   "id": "santpau",
   "nom": "Sant Pau d'Ordal",
   "tmin": 12.5,
-  "tmax": 12.8,
-  "pluja": 0.2
+  "tmax": 13.0,
+  "pluja": 5.4
  },
  {
   "dia": "2026-10-19",
   "id": "n340",
   "nom": "N-340 PK 1224",
   "tmin": 11.9,
-  "tmax": 12.2,
+  "tmax": 12.5,
   "pluja": null
  },
  {
@@ -20,7 +20,7 @@
   "id": "lavern",
   "nom": "Lavern",
   "tmin": 12.5,
-  "tmax": 12.7,
+  "tmax": 12.9,
   "pluja": 0.4
  },
  {
