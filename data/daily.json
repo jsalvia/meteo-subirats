@@ -11,7 +11,7 @@
   "dia": "2026-10-21",
   "id": "n340",
   "nom": "N-340 PK 1224",
-  "tmin": 10.3,
+  "tmin": 9.3,
   "tmax": 18.7,
   "pluja": null
  },
@@ -27,7 +27,7 @@
   "dia": "2026-10-21",
   "id": "cantallops",
   "nom": "Cantallops",
-  "tmin": 11.4,
+  "tmin": 11.1,
   "tmax": 20.6,
   "pluja": 0.0
  },
