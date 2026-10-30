@@ -4,7 +4,7 @@
   "id": "santpau",
   "nom": "Sant Pau d'Ordal",
   "tmin": 14.2,
-  "tmax": 16.4,
+  "tmax": 17.6,
   "pluja": 0.0
  },
  {
@@ -12,7 +12,7 @@
   "id": "n340",
   "nom": "N-340 PK 1224",
   "tmin": 15.0,
-  "tmax": 15.0,
+  "tmax": 15.9,
   "pluja": null
  },
  {
@@ -20,7 +20,7 @@
   "id": "lavern",
   "nom": "Lavern",
   "tmin": 14.2,
-  "tmax": 17.1,
+  "tmax": 17.8,
   "pluja": 0.0
  },
  {
@@ -28,7 +28,7 @@
   "id": "cantallops",
   "nom": "Cantallops",
   "tmin": 13.5,
-  "tmax": 16.3,
+  "tmax": 17.1,
   "pluja": 0.0
  },
  {
