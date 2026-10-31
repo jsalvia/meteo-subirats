@@ -1,13 +1,13 @@
 {
- "actualitzat": "2026-10-30T23:06:27+02:00",
- "epoch": 1793394387,
+ "actualitzat": "2026-10-31T02:50:31+02:00",
+ "epoch": 1793407831,
  "estacions": [
   {
-   "temp": 16.1,
-   "hum": 85.0,
+   "temp": 15.1,
+   "hum": 86.0,
    "vent": 3.0,
    "pluja_avui": 0.0,
-   "ratxa": 21.0,
+   "ratxa": 10.0,
    "pressio": 1019.6,
    "pluja_temporada": 610.6,
    "id": "santpau",
@@ -18,29 +18,38 @@
    ]
   },
   {
-   "temp": 15.6,
-   "hum": 86.0,
+   "temp": 14.6,
+   "hum": 88.0,
    "vent": 0.0,
    "pluja_avui": 0.0,
-   "ratxa": 0.0,
-   "pressio": 1018.1,
-   "pluja": 0.0,
    "id": "lavern",
    "nom": "Lavern",
    "xarxes": [
-    "Meteoclimatic",
-    "Weathercloud"
+    "Meteoclimatic"
    ]
   },
   {
-   "temp": 15.8,
-   "hum": 90.0,
+   "temp": 14.1,
+   "hum": 92.0,
    "vent": 0.0,
    "pluja_avui": 0.0,
    "id": "cantallops",
    "nom": "Cantallops",
    "xarxes": [
     "Meteoclimatic"
+   ]
+  },
+  {
+   "temp": 14.0,
+   "hum": 92.0,
+   "vent": 0.0,
+   "ratxa": 2.7,
+   "pressio": 1021.9,
+   "pluja": 0.0,
+   "id": "n340",
+   "nom": "N-340 PK 1224",
+   "xarxes": [
+    "Weathercloud"
    ]
   }
  ]
