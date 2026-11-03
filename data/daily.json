@@ -5,13 +5,13 @@
   "nom": "Sant Pau d'Ordal",
   "tmin": 8.9,
   "tmax": 11.9,
-  "pluja": 22.4
+  "pluja": 26.0
  },
  {
   "dia": "2026-11-03",
   "id": "n340",
   "nom": "N-340 PK 1224",
-  "tmin": 11.2,
+  "tmin": 9.4,
   "tmax": 11.2,
   "pluja": null
  },
@@ -21,7 +21,7 @@
   "nom": "Lavern",
   "tmin": 8.6,
   "tmax": 11.6,
-  "pluja": 0.6
+  "pluja": 3.8
  },
  {
   "dia": "2026-11-03",
@@ -29,7 +29,7 @@
   "nom": "Cantallops",
   "tmin": 8.9,
   "tmax": 11.9,
-  "pluja": 25.8
+  "pluja": 30.0
  },
  {
   "dia": "2026-11-02",
