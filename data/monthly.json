@@ -6,7 +6,7 @@
   "pluja": 28.0,
   "tmax": 21.3,
   "tmin": 7.7,
-  "dies": 4
+  "dies": 5
  },
  {
   "mes": "2026-11",
@@ -15,16 +15,16 @@
   "pluja": null,
   "tmax": 18.8,
   "tmin": 6.7,
-  "dies": 4
+  "dies": 5
  },
  {
   "mes": "2026-11",
   "id": "lavern",
   "nom": "Lavern",
-  "pluja": 4.2,
+  "pluja": 4.4,
   "tmax": 21.7,
   "tmin": 7.8,
-  "dies": 4
+  "dies": 5
  },
  {
   "mes": "2026-11",
@@ -33,7 +33,7 @@
   "pluja": 32.0,
   "tmax": 20.6,
   "tmin": 7.2,
-  "dies": 4
+  "dies": 5
  },
  {
   "mes": "2026-10",
