@@ -3,31 +3,31 @@
   "dia": "2026-11-06",
   "id": "santpau",
   "nom": "Sant Pau d'Ordal",
-  "tmin": 8.2,
+  "tmin": 5.6,
   "tmax": 8.2,
-  "pluja": 0.0
+  "pluja": 0.2
  },
  {
   "dia": "2026-11-06",
   "id": "n340",
   "nom": "N-340 PK 1224",
   "tmin": 7.9,
-  "tmax": 7.9,
+  "tmax": 11.1,
   "pluja": null
  },
  {
   "dia": "2026-11-06",
   "id": "lavern",
   "nom": "Lavern",
-  "tmin": 8.4,
+  "tmin": 6.7,
   "tmax": 8.4,
-  "pluja": 0.4
+  "pluja": 0.2
  },
  {
   "dia": "2026-11-06",
   "id": "cantallops",
   "nom": "Cantallops",
-  "tmin": 9.7,
+  "tmin": 6.2,
   "tmax": 9.7,
   "pluja": 0.0
  },
