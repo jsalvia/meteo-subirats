@@ -6,7 +6,7 @@
   "pluja": 28.8,
   "tmax": 21.3,
   "tmin": 5.6,
-  "dies": 7
+  "dies": 8
  },
  {
   "mes": "2026-11",
@@ -15,7 +15,7 @@
   "pluja": null,
   "tmax": 18.8,
   "tmin": 6.7,
-  "dies": 7
+  "dies": 8
  },
  {
   "mes": "2026-11",
@@ -24,16 +24,16 @@
   "pluja": 4.8,
   "tmax": 21.7,
   "tmin": 6.7,
-  "dies": 7
+  "dies": 8
  },
  {
   "mes": "2026-11",
   "id": "cantallops",
   "nom": "Cantallops",
-  "pluja": 33.2,
+  "pluja": 33.4,
   "tmax": 20.6,
   "tmin": 6.2,
-  "dies": 7
+  "dies": 8
  },
  {
   "mes": "2026-10",
