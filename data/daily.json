@@ -1,5 +1,37 @@
 [
  {
+  "dia": "2026-11-12",
+  "id": "santpau",
+  "nom": "Sant Pau d'Ordal",
+  "tmin": 16.4,
+  "tmax": 16.4,
+  "pluja": 6.0
+ },
+ {
+  "dia": "2026-11-12",
+  "id": "n340",
+  "nom": "N-340 PK 1224",
+  "tmin": 15.2,
+  "tmax": 15.2,
+  "pluja": null
+ },
+ {
+  "dia": "2026-11-12",
+  "id": "lavern",
+  "nom": "Lavern",
+  "tmin": 16.2,
+  "tmax": 16.2,
+  "pluja": 5.8
+ },
+ {
+  "dia": "2026-11-12",
+  "id": "cantallops",
+  "nom": "Cantallops",
+  "tmin": 16.0,
+  "tmax": 16.0,
+  "pluja": 7.0
+ },
+ {
   "dia": "2026-11-11",
   "id": "santpau",
   "nom": "Sant Pau d'Ordal",
