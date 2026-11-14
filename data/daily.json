@@ -12,7 +12,7 @@
   "id": "n340",
   "nom": "N-340 PK 1224",
   "tmin": 12.4,
-  "tmax": 12.6,
+  "tmax": 14.5,
   "pluja": null
  },
  {
@@ -28,7 +28,7 @@
   "id": "cantallops",
   "nom": "Cantallops",
   "tmin": 11.6,
-  "tmax": 13.6,
+  "tmax": 13.7,
   "pluja": 0.0
  },
  {
