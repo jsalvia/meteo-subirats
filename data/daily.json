@@ -1,5 +1,29 @@
 [
  {
+  "dia": "2026-11-28",
+  "id": "santpau",
+  "nom": "Sant Pau d'Ordal",
+  "tmin": 5.7,
+  "tmax": 5.7,
+  "pluja": 0.0
+ },
+ {
+  "dia": "2026-11-28",
+  "id": "lavern",
+  "nom": "Lavern",
+  "tmin": 4.6,
+  "tmax": 4.6,
+  "pluja": 0.0
+ },
+ {
+  "dia": "2026-11-28",
+  "id": "cantallops",
+  "nom": "Cantallops",
+  "tmin": 4.4,
+  "tmax": 4.4,
+  "pluja": 0.0
+ },
+ {
   "dia": "2026-11-27",
   "id": "santpau",
   "nom": "Sant Pau d'Ordal",
